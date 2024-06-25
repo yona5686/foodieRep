@@ -8,13 +8,17 @@ import Discover from '../pages/Discover';
 
 export default function App() {
 
-  const Tab = createBottomTabNavigator();
+    const Tab = createBottomTabNavigator();
 
-  return(
-    <Tab.Navigator>
-        <Tab.Screen name="Home" component={Home}/>
-        <Tab.Screen name="Restaurants" component={Restaurants}/>
-        <Tab.Screen name="Discover" component={Discover}/>
-    </Tab.Navigator>
-  )
+    return(
+        <Tab.Navigator
+            screenOptions={{
+                tabBarLabelPosition:"below-icon",
+                tabBarActiveTintColor:"black"
+            }}>
+            <Tab.Screen name="Home" component={Home} options={{ tabBarIcon:  }}/>
+            <Tab.Screen name="Restaurants" component={Restaurants}/>
+            <Tab.Screen name="Discover" component={Discover}/>
+        </Tab.Navigator>
+    )
 }

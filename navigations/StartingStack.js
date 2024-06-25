@@ -10,16 +10,16 @@ import MainTabs from './MainTab';
 
 export default function StartingStack() {
 
-  const Stack = createNativeStackNavigator();
+    const Stack = createNativeStackNavigator();
 
-  return(
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="GetStarted" component={GetStarted} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Main" options={{ headerShown: false }} component={MainTabs} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
+    return(
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name="GetStarted" component={GetStarted} options={{ headerShown: false }} />
+                <Stack.Screen name="SignIn" component={SignIn} />
+                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="Main" options={{ headerShown: false }} component={MainTabs} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
