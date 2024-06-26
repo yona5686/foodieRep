@@ -3,7 +3,7 @@ import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View } from 'reac
 
 export default function Register({ navigation }) {
 
-    return (//to put all of them in useState or to pass them in context or something else????????????????????????????????????????????
+    return (
         <View style={styles.container}>
             <Image source={require('../assets/turtleCooking.png')} style={styles.image} />
             <Text style={styles.title}>Foodie</Text>

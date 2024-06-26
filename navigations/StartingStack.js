@@ -6,6 +6,7 @@ import GetStarted from '../pages/GetStarted'
 import SignIn from '../pages/SignIn';
 import Register from '../pages/Register';
 import MainTabs from './MainTab';
+import RestaurantPage from '../pages/RestaurantPage';
 
 
 export default function StartingStack() {
