@@ -20,6 +20,7 @@ export default function StartingStack() {
                 <Stack.Screen name="SignIn" component={SignIn} />
                 <Stack.Screen name="Register" component={Register} />
                 <Stack.Screen name="Main" options={{ headerShown: false }} component={MainTabs} />
+                <Stack.Screen name="RestaurantPage" component={RestaurantPage} />
             </Stack.Navigator>
         </NavigationContainer>
     )
