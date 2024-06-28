@@ -1,7 +1,7 @@
 import { StyleSheet, Text, ScrollView } from "react-native"
 import { useState } from "react"
 
-import ThemeButtons from "../components/ThemeButtons";
+import ThemeButtons from "../components/themeButtons";
 import AllRestaurantByTheme from "../components/AllRestaurantByTheme";
 
 export default function Restaurants( {navigation} ){
@@ -12,7 +12,7 @@ export default function Restaurants( {navigation} ){
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Choose theme</Text>
-            <ThemeButtons themesLst = {themes} nav = {navigation} setTheme = {setSelectedTheme}/>
+            <ThemeButtons themesLst = {themes} setTheme = {setSelectedTheme}/>
             <AllRestaurantByTheme theme={selectedTheme}/>
         </ScrollView>
     )

@@ -4,7 +4,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AllRestaurantByTheme({theme}) {//theme sent to back-end
 
-    const [restaurants, setRestaurants] = useState([{name:"Libia", address:"Hahalutz", deliveryCost:5, img:"https://shorturl.at/ommKY", theme:"Pizza"}, {name:"Libia", address:"Hahalutz", deliveryCost:5, img:"https://shorturl.at/ommKY", theme:"Pizza"}, {name:"Libia", address:"Hahalutz", deliveryCost:5, img:"https://shorturl.at/ommKY", theme:"Pizza"}]);
+    const [restaurants, setRestaurants] = useState([{name:"Libia", address:"Hahalutz", deliveryCost:5, img:"https://shorturl.at/MQBeg", theme:"Israeli"}, {name:"Pizza moshe", address:"Eilat", deliveryCost:3, img:"https://shorturl.at/ommKY", theme:"Pizza"}, {name:"Baladi", address:"Maale adumim", deliveryCost:0, img:"https://shorturl.at/V2Gg9", theme:"Meat"}]);
+    //example /\
+
+    //if theme=="" send request getAllRestaurants
+    //else send requsest getAllRestaurantsByTheme
 
     return (
         <View style={styles.container}>
