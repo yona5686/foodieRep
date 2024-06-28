@@ -1,12 +1,12 @@
 import { StyleSheet, Text, ScrollView } from "react-native"
 import { useState } from "react"
 
-import ThemeButtons from "../components/themeButtons";
+import ThemeButtons from "../components/ThemeButtons";
 import AllRestaurantByTheme from "../components/AllRestaurantByTheme";
 
 export default function Restaurants( {navigation} ){
 
-    const [themes, setThemes] = useState(["Asian", "Pizza", "Fast Food", "Burger", "Mexican"]);//examples
+    const [themes, setThemes] = useState(["Asian", "Pizza", "Israeli", "Burger", "Meat"]);//examples
     const [selectedTheme, setSelectedTheme] = useState("");
 
     return(

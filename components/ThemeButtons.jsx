@@ -1,6 +1,4 @@
 import { TouchableOpacity, View, StyleSheet, Text } from "react-native";
-import { useState } from "react";
-
 
 export default function ThemeButtons({themesLst, setTheme}) {
 
