@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useResContext } from '../ResContext';
 
 export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back-end
+
+    const { setRestaurant } = useResContext();
 
     const [restaurants, setRestaurants] = useState([{name:"Libia", address:"Hahalutz", deliveryCost:5, img:"https://shorturl.at/MQBeg", theme:"Israeli"}, {name:"Pizza moshe", address:"Eilat", deliveryCost:3, img:"https://shorturl.at/ommKY", theme:"Pizza"}, {name:"Baladi", address:"Maale adumim", deliveryCost:0, img:"https://shorturl.at/V2Gg9", theme:"Meat"}]);
     //example /\
@@ -21,18 +24,20 @@ export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back
 
     return (
         <View style={styles.container}>
-            {restaurants.map((restaurant, index) => (
+            {restaurants.map((currentRes, index) => (
                 <TouchableOpacity key={index} onPress={() => {
-                    nav.navigate("RestaurantPage", {restaurant});//??????????????????????????????????????????????????????????
+                    setRestaurant(currentRes);
+                    nav.navigate("RestaurantPage");
+
                 }}>
                     <View style={styles.cardContainer}>
-                        <Image source={{ uri: restaurant.img }} style={styles.image}></Image>
+                        <Image source={{ uri: currentRes.img }} style={styles.image}></Image>
                         <View style={styles.textContainer}>
-                            <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                            <Text style={styles.restaurantTheme}>{restaurant.theme}</Text>
-                            <Text style={styles.addressText}>Address: {restaurant.address}</Text>
+                            <Text style={styles.restaurantName}>{currentRes.name}</Text>
+                            <Text style={styles.restaurantTheme}>{currentRes.theme}</Text>
+                            <Text style={styles.addressText}>Address: {currentRes.address}</Text>
                             <View style={styles.deliveryInfo}>
-                                <Text style={styles.deliveryCost}>{restaurant.deliveryCost}$</Text>
+                                <Text style={styles.deliveryCost}>{currentRes.deliveryCost}$</Text>
                                 <MaterialCommunityIcons
                                     name={'truck'}
                                     size={24}
