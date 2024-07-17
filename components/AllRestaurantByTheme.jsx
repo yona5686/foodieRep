@@ -7,7 +7,11 @@ export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back
 
     const { setRestaurant } = useResContext();
 
-    const [restaurants, setRestaurants] = useState([{name:"Libia", address:"Hahalutz", deliveryCost:5, img:"https://shorturl.at/s79h3", theme:"Israeli"}, {name:"Pizza moshe", address:"Eilat", deliveryCost:3, img:"https://shorturl.at/ommKY", theme:"Pizza"}, {name:"Baladi", address:"Maale adumim", deliveryCost:0, img:"https://shorturl.at/V2Gg9", theme:"Meat"}]);
+    const [restaurants, setRestaurants] = useState([
+        { name: "Libia", address: "Hahalutz", deliveryCost: 5, img: "https://shorturl.at/s79h3", theme: "Israeli" },
+        { name: "Pizza moshe", address: "Eilat", deliveryCost: 3, img: "https://shorturl.at/ommKY", theme: "Pizza" },
+        { name: "Baladi", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" }
+    ]);
     //example for get restaurants
 
     useEffect(() => {
