@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useResContext } from '../ResContext';
+import PromoCodeComp from '../components/PromoCodeComp';
 
 export default function RestaurantPage() {
     const { restaurant } = useResContext();
@@ -13,11 +14,9 @@ export default function RestaurantPage() {
     ]);
 
     const [quantities, setQuantities] = useState(dishes.reduce((acc, dish) => {
-        acc[dish.id] = 1;
+        acc[dish.id] = 0;
         return acc;
     }, {}));
-
-    const [promoCode, setPromoCode] = useState('');
 
     const handleQuantityChange = (id, amount) => {
         setQuantities(prevQuantities => ({
@@ -50,17 +49,7 @@ export default function RestaurantPage() {
                         <Text style={styles.priceText}>${item.price}</Text>
                     </View>
                 ))}
-                <View style={styles.promoContainer}>
-                    <TextInput
-                        style={styles.promoInput}
-                        placeholder="Enter your promo code"
-                        value={promoCode}
-                        onChangeText={setPromoCode}
-                    />
-                    <TouchableOpacity style={styles.applyButton}>
-                        <Text style={styles.applyButtonText}>Apply</Text>
-                    </TouchableOpacity>
-                </View>
+                <PromoCodeComp/>
                 <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
                 <TouchableOpacity style={styles.checkoutButton}>
                     <Text style={styles.checkoutButtonText}>Checkout</Text>
@@ -74,7 +63,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f0fff0', // Light green background,
     },
     header: {
         fontSize: 24,
@@ -134,28 +123,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         flex: 1,
         textAlign: 'right',
-    },
-    promoContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 20,
-    },
-    promoInput: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        padding: 10,
-        marginRight: 10,
-    },
-    applyButton: {
-        backgroundColor: '#4caf50',
-        padding: 10,
-        borderRadius: 8,
-    },
-    applyButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
     },
     totalText: {
         fontSize: 20,
