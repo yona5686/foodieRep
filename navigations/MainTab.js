@@ -16,21 +16,21 @@ export default function App( {navigation} ) {
         <Tab.Navigator
             screenOptions={{
                 tabBarLabelPosition:"below-icon",
-                tabBarActiveTintColor:"green"
+                tabBarActiveTintColor:"black"
             }}>
 
             <Tab.Screen name="Home" component={Home} options={{
-                tabBarIcon: () => (<Ionicons name='home' size={20}/>),
+                tabBarIcon: ({focused, color}) => (<Ionicons name='home' size={20} color={focused ? "#067506": color}/>),
                 headerRight: () => (<DisconnectHeader nav = {navigation}/>)
             }}/>
 
             <Tab.Screen name="Restaurants" component={Restaurants} options={{
-                tabBarIcon: () => (<Ionicons name='restaurant' size={20}/>),
+                tabBarIcon: ({focused, color}) => (<Ionicons name='restaurant' size={20} color={focused ? "#067506": color}/>),
                 headerRight: () => (<DisconnectHeader nav = {navigation}/>)
             }}/>
 
             <Tab.Screen name="Discover" component={Discover} options={{
-                tabBarIcon: () => (<Ionicons name='search' size={20}/>),
+                tabBarIcon: ({focused, color}) => (<Ionicons name='search' size={20} color={focused ? "#green": color}/>),
                 headerRight: () => (<DisconnectHeader nav = {navigation}/>)
             }}/>
 

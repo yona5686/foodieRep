@@ -38,9 +38,9 @@ export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back
                         <View style={styles.textContainer}>
                             <Text style={styles.restaurantName}>{currentRes.name}</Text>
                             <Text style={styles.restaurantTheme}>{currentRes.theme}</Text>
-                            <Text style={styles.addressText}>Address: {currentRes.address}</Text>
+                            <Text style={styles.addressText}>{currentRes.address}</Text>
                             <View style={styles.deliveryInfo}>
-                                <Text style={styles.deliveryCost}>{currentRes.deliveryCost}$</Text>
+                                <Text style={styles.deliveryCost}>{currentRes.deliveryCost == 0 ? "FREE" : currentRes.deliveryCost + "$"}</Text>
                                 <MaterialCommunityIcons
                                     name={'truck'}
                                     size={24}
@@ -69,9 +69,9 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
-        elevation: 1,
         padding: 10,
-        width: 400
+        width: 400,
+        borderWidth: 0.5
     },
     textContainer: {
         flex: 1,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     restaurantName: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: 10,
     },
     restaurantTheme: {
         fontSize: 14,
@@ -98,9 +98,11 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 15,
         fontSize: 14,
+        marginBottom: 5,
+
     },
     deliveryCost: {
-        marginRight: 15,
+        marginRight: 5,
         fontSize: 14,
     },
     deliveryInfo: {

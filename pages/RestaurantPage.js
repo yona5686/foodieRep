@@ -6,27 +6,27 @@ import PromoCodeComp from '../components/PromoCodeComp';
 export default function RestaurantPage() {
     const { restaurant } = useResContext();
 
-    const [dishes, setDishes] = useState([
-        { id: '1', name: 'Mushroom', price: 12 },
-        { id: '2', name: 'Spicy Salami', price: 15 },
-        { id: '3', name: 'Vegetarian', price: 18 },
-        { id: '4', name: 'Spinach Pizza', price: 15 },
+    const [dishes, setDishes] = useState([//example get dishes of restaurant
+        { id: '0', name: 'Humus', price: 12 },
+        { id: '1', name: 'Shnizel', price: 15 },
+        { id: '2', name: 'Hot dog', price: 18 },
+        { id: '3', name: 'Humus Shnizel', price: 15 },
     ]);
 
-    const [quantities, setQuantities] = useState(dishes.reduce((acc, dish) => {
-        acc[dish.id] = 0;
-        return acc;
+    const [quantities, setQuantities] = useState(dishes.reduce((arr, dish) => {
+        arr[dish.id] = 0;
+        return arr;
     }, {}));
 
     const handleQuantityChange = (id, amount) => {
         setQuantities(prevQuantities => ({
             ...prevQuantities,
-            [id]: Math.max(1, (prevQuantities[id] || 1) + amount),
+            [id]: prevQuantities[id] + amount,
         }));
     };
 
     const calculateTotal = () => {
-        return dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.id] || 1)), 0);
+        return dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.id])), 0);
     };
 
     return (
@@ -38,7 +38,7 @@ export default function RestaurantPage() {
                     <View style={styles.dishContainer} key={item.id}>
                         <Text style={styles.dishName}>{item.name}</Text>
                         <View style={styles.quantityContainer}>
-                            <TouchableOpacity onPress={() => handleQuantityChange(item.id, -1)} style={styles.quantityButton}>
+                            <TouchableOpacity onPress={() => (quantities[item.id]>0)? handleQuantityChange(item.id, -1): {}} style={styles.quantityButton}>
                                 <Text style={styles.quantityButtonText}>-</Text>
                             </TouchableOpacity>
                             <Text style={styles.quantityText}>{quantities[item.id]}</Text>

@@ -12,7 +12,7 @@ export default function Restaurants( {navigation} ){
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Choose theme</Text>
-            <ThemeButtons themesLst = {themes} setTheme = {setSelectedTheme}/>
+            <ThemeButtons themesLst = {themes} setTheme = {setSelectedTheme} selectedTheme = {selectedTheme}/>
             <AllRestaurantByTheme theme={selectedTheme} nav={navigation}/>
         </ScrollView>
     )
