@@ -6,7 +6,7 @@ import AllRestaurantByTheme from "../components/AllRestaurantByTheme";
 
 export default function Restaurants( {navigation} ){
 
-    const [themes, setThemes] = useState(["Asian", "Pizza", "Israeli", "Burger", "Meat"]);//examples
+    const [themes, setThemes] = useState(["Asian", "Pizza", "Israeli", "Burger", "Meat"]);//examples for get themes
     const [selectedTheme, setSelectedTheme] = useState("");
 
     return(
