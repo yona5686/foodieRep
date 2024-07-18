@@ -1,9 +1,14 @@
 import { View, TextInput, TouchableOpacity, StyleSheet, Text } from "react-native"
 import { useState } from "react";
 
-export default function PromoCodeComp() {
+export default function PromoCodeComp({ setDelCost }) {
 
-    const [promoCode, setPromoCode] = useState('');
+    const [promoCode, setPromoCode] = useState("");
+
+    function checkPromo() {
+        if(promoCode == "TCB" || promoCode == "tcb" || promoCode == "Tcb")
+            setDelCost(0);
+    }
 
     return(
         <View style={styles.promoContainer}>
@@ -13,7 +18,7 @@ export default function PromoCodeComp() {
                 value={promoCode}
                 onChangeText={setPromoCode}
             />
-            <TouchableOpacity style={styles.applyButton}>
+            <TouchableOpacity style={styles.applyButton} onPress={() => checkPromo()}>
                 <Text style={styles.applyButtonText}>Apply</Text>
             </TouchableOpacity>
         </View>

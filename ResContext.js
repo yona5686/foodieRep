@@ -4,7 +4,7 @@ const ResContext = createContext();
 
 export const ResProvider = ({ children }) => {
 
-    const [restaurant, setRestaurant] = useState("ds"); 
+    const [restaurant, setRestaurant] = useState({}); 
 
     return (
         <ResContext.Provider value={{ restaurant, setRestaurant }}>

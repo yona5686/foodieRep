@@ -1,32 +1,35 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useResContext } from '../ResContext';
 import PromoCodeComp from '../components/PromoCodeComp';
 
 export default function RestaurantPage() {
+
     const { restaurant } = useResContext();
 
+    const [delCost, setDelCost] = useState(restaurant.deliveryCost);
+
     const [dishes, setDishes] = useState([//example get dishes of restaurant
-        { id: '0', name: 'Humus', price: 12 },
-        { id: '1', name: 'Shnizel', price: 15 },
-        { id: '2', name: 'Hot dog', price: 18 },
-        { id: '3', name: 'Humus Shnizel', price: 15 },
+        { name: 'Humus', price: 12 },
+        { name: 'Shnizel', price: 15 },
+        { name: 'Hot dog', price: 18 },
+        { name: 'Humus Shnizel', price: 15 },
     ]);
 
     const [quantities, setQuantities] = useState(dishes.reduce((arr, dish) => {
-        arr[dish.id] = 0;
+        arr[dish.name] = 0;
         return arr;
     }, {}));
 
-    const handleQuantityChange = (id, amount) => {
+    const handleQuantityChange = (name, amount) => {
         setQuantities(prevQuantities => ({
             ...prevQuantities,
-            [id]: prevQuantities[id] + amount,
+            [name]: prevQuantities[name] + amount,
         }));
     };
 
     const calculateTotal = () => {
-        return dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.id])), 0);
+        return dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.name])), 0) + restaurant.deliveryCost;
     };
 
     return (
@@ -35,21 +38,26 @@ export default function RestaurantPage() {
             <View style={styles.cartContainer}>
                 <Text style={styles.subHeader}>{restaurant.name} - Cart Summary</Text>
                 {dishes.map((item) => (
-                    <View style={styles.dishContainer} key={item.id}>
+                    <View style={styles.dishContainer} key={item.name}>
                         <Text style={styles.dishName}>{item.name}</Text>
                         <View style={styles.quantityContainer}>
-                            <TouchableOpacity onPress={() => (quantities[item.id]>0)? handleQuantityChange(item.id, -1): {}} style={styles.quantityButton}>
+                            <TouchableOpacity onPress={() => (quantities[item.name]>0)? handleQuantityChange(item.name, -1): {}} style={styles.quantityButton}>
                                 <Text style={styles.quantityButtonText}>-</Text>
                             </TouchableOpacity>
-                            <Text style={styles.quantityText}>{quantities[item.id]}</Text>
-                            <TouchableOpacity onPress={() => handleQuantityChange(item.id, 1)} style={styles.quantityButton}>
+                            <Text style={styles.quantityText}>{quantities[item.name]}</Text>
+                            <TouchableOpacity onPress={() => handleQuantityChange(item.name, 1)} style={styles.quantityButton}>
                                 <Text style={styles.quantityButtonText}>+</Text>
                             </TouchableOpacity>
                         </View>
                         <Text style={styles.priceText}>${item.price}</Text>
                     </View>
                 ))}
-                <PromoCodeComp/>
+                <PromoCodeComp setDelCost = {setDelCost}/>
+                { delCost != 0 ? (
+                    <Text style={styles.deliveryCostText}>Delivery cost: ${delCost}</Text> 
+                ) : (
+                    <Text style={{...styles.deliveryCostText, color: "green"}}>Free Delivery</Text>
+                )}
                 <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
                 <TouchableOpacity style={styles.checkoutButton}>
                     <Text style={styles.checkoutButtonText}>Checkout</Text>
@@ -124,11 +132,17 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'right',
     },
+    deliveryCostText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        textAlign: 'left',
+    },
     totalText: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
-        textAlign: 'right',
+        textAlign: 'left',
     },
     checkoutButton: {
         backgroundColor: '#4caf50',
