@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useResContext } from '../ResContext';
 
@@ -6,6 +6,19 @@ import { useResContext } from '../ResContext';
 export default function Check({ dishes, quantities, setChecked, calculateTotal }) {
 
     const { restaurant, delCost } = useResContext();
+    const [err, setErr] = useState(false);
+
+    function finishOrder() {
+        if(calculateTotal() <= restaurant.deliveryCost){
+            setErr(true);
+            setTimeout(() => {
+                setErr(false);
+            }, 2000);
+        }
+        else {
+            alert("On the way");
+        }
+    }
 
     return(
         <View style={styles.cartContainer}>
@@ -13,7 +26,7 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             {dishes.map((item) => (
                 <View style={styles.dishContainer} key={item.name}>
                     <Text style={styles.dishName}>{item.name}</Text>
-                    <Text style={styles.quantityText}>x{quantities[item.name]}</Text>
+                    <Text style={!err ? styles.quantityText : {...styles.quantityText, color: "#e20606", fontSize: 20, fontWeight: 'bold'}}>x{quantities[item.name]}</Text>
                     <Text style={styles.priceText}>${item.price*quantities[item.name]}</Text>
                 </View>
             ))}
@@ -24,11 +37,11 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             )}
             <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
             <View style = {styles.buttonsContainer}>
-                <TouchableOpacity style={styles.checkoutButton} onPress={() => setChecked(true)}>
+                <TouchableOpacity style={styles.checkoutButton} onPress={() => finishOrder()}>
                     <Text style={styles.checkoutButtonText}>Order</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.editButton} onPress={() => setChecked(false)}>
-                <Text style={styles.checkoutButtonText}>Edit</Text>
+                    <Text style={styles.checkoutButtonText}>Edit</Text>
                 </TouchableOpacity>
             </View>
         </View>

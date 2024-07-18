@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useResContext } from '../ResContext';
+import RestaurantCard from './RestaurantCard';
 
 export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back-end
-
-    const { setRestaurant } = useResContext();
 
     const [restaurants, setRestaurants] = useState([
         { name: "Libia", address: "Hahalutz", deliveryCost: 5, img: "https://shorturl.at/s79h3", theme: "Israeli" },
@@ -28,28 +26,7 @@ export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back
     return (
         <View style={styles.container}>
             {restaurants.map((currentRes, index) => (
-                <TouchableOpacity key={index} onPress={() => {
-                    setRestaurant(currentRes);
-                    nav.navigate("RestaurantPage");
-
-                }}>
-                    <View style={styles.cardContainer}>
-                        <Image source={{ uri: currentRes.img }} style={styles.image}></Image>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.restaurantName}>{currentRes.name}</Text>
-                            <Text style={styles.restaurantTheme}>{currentRes.theme}</Text>
-                            <Text style={styles.addressText}>{currentRes.address}</Text>
-                            <View style={styles.deliveryInfo}>
-                                <Text style={styles.deliveryCost}>{currentRes.deliveryCost == 0 ? "FREE" : currentRes.deliveryCost + "$"}</Text>
-                                <MaterialCommunityIcons
-                                    name={'truck'}
-                                    size={24}
-                                    color="black"
-                                />
-                            </View>
-                        </View>
-                    </View>
-                </TouchableOpacity>
+                <RestaurantCard currentRes={currentRes} key={index} nav={nav}/>
             ))}
         </View>
     );

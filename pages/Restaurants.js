@@ -6,8 +6,8 @@ import AllRestaurantByTheme from "../components/AllRestaurantByTheme";
 
 export default function Restaurants( {navigation} ){
 
-    const [themes, setThemes] = useState(["Asian", "Pizza", "Israeli", "Burger", "Meat"]);//examples for get themes
-    const [selectedTheme, setSelectedTheme] = useState("");
+    const [themes, setThemes] = useState(["All", "Asian", "Pizza", "Israeli", "Burger", "Meat"]);//examples for get themes
+    const [selectedTheme, setSelectedTheme] = useState("All");
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
