@@ -1,25 +1,10 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useResContext } from '../ResContext';
+import { useResContext } from "../ResContext";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
+export default function OrderBlock() {
 
-export default function Check({ dishes, quantities, setChecked, calculateTotal }) {
-
-    const { restaurant, delCost } = useResContext();
-    const [err, setErr] = useState(false);
-
-    function finishOrder() {
-        if(calculateTotal() <= restaurant.deliveryCost){
-            setErr(true);
-            setTimeout(() => {
-                setErr(false);
-            }, 500);
-        }
-        else {
-            alert("On the way");
-            //send order details to db
-        }
-    }
+    const { restaurant, delCost  } = useResContext();
 
     return(
         <View style={styles.cartContainer}>
@@ -37,17 +22,10 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
                 <Text style={{...styles.deliveryCostText, color: "green"}}>Free Delivery</Text>
             )}
             <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
-            <View style = {styles.buttonsContainer}>
-                <TouchableOpacity style={styles.checkoutButton} onPress={() => finishOrder()}>
-                    <Text style={styles.checkoutButtonText}>Order</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.editButton} onPress={() => setChecked(false)}>
-                    <Text style={styles.checkoutButtonText}>Edit</Text>
-                </TouchableOpacity>
-            </View>
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     cartContainer: {
@@ -77,11 +55,6 @@ const styles = StyleSheet.create({
     dishName: {
         fontSize: 16,
         flex: 2,
-    },
-    quantityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
     },
     quantityText: {
         textAlign: "left",
