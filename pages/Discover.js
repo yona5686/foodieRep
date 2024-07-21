@@ -1,23 +1,34 @@
 import { ScrollView, View, StyleSheet } from "react-native"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar"
 import RestaurantCard from "../components/RestaurantCard"
+import axios from "axios";
+import { useResContext } from "../ResContext";
 
 export default function Discover({ navigation }){
 
-    const [restaurants, setRestaurants] = useState([
-        { name: "Libia", address: "Hahalutz", deliveryCost: 5, img: "https://shorturl.at/s79h3", theme: "Israeli" },
-        { name: "Lizerria", address: "Eilat", deliveryCost: 3, img: "https://shorturl.at/ommKY", theme: "Pizza" },
-        { name: "Liodelia", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" },
-        { name: "Liodelia", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" },
-        { name: "Liodelia", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" },
-        { name: "Liodelia", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" }
-    ]);
-    //example for get restaurant by name(searched)
+    const { baseUrl } = useResContext();
+
+    const [txt, setTxt] = useState("");
+    const [restaurants, setRestaurants] = useState([]);
+
+    useEffect(() => {
+        const handleSearch = async () => {
+            const res = await axios.get(`${baseUrl}/rest/getRestByName/${txt}`);
+            setRestaurants(res.data);
+        }
+
+        try {
+            if(txt != "")
+                handleSearch();
+        } catch (e) {
+            console.error("handleSearch Failed\n" + e);
+        }
+    }, [txt])
 
     return(
         <View style = {styles.container}>
-            <SearchBar/>
+            <SearchBar setTxt={setTxt}/>
             <ScrollView contentContainerStyle={styles.containerScroll} overScrollMode="never" showsVerticalScrollIndicator={false}>
                 {restaurants.map((currentRes, index) => (
                     <RestaurantCard currentRes={currentRes} key={index} nav={navigation}/>

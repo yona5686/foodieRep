@@ -1,11 +1,15 @@
 import { TextInput, View, StyleSheet } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
-export default function SearchBar() {
+export default function SearchBar({ setTxt }) {
+
+    const handleTextChange = (text) => {
+        setTxt(text);
+    };
 
     return(
         <View style={styles.container}>
-            <TextInput placeholder="Search..." style={styles.input}/>
+            <TextInput placeholder="Search..." style={styles.input} onChangeText={handleTextChange}/>
             <Ionicons name="search" size={40} style={styles.iconContainer}/>
         </View>
     )
