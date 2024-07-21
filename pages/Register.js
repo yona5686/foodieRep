@@ -1,7 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View } from 'react-native';
+import { useResContext } from '../ResContext';
+import axios from 'axios';
 
 export default function Register({ navigation }) {
+
+    const { baseUrl } = useResContext();
+
+    const [user, setUser] = useState({email: "", password: "", fullName: "", address: ""});
+
+    const [usersList, setUsersList] = useState([]);
+
+    useEffect(() => {
+        const getList = async () => {
+            const res = await axios.get(`${baseUrl}/user/`);
+            setUsersList(res.data);
+        }
+
+        try {
+            getList();
+        } catch(e) {
+            console.error("getUsersList Failed\n" + e);
+        }
+    }, [])
+
+    async function handleSignUp() {
+        let flag = false;
+        usersList.forEach(curUser => {
+            if(user.email == curUser.email){
+                flag = true;
+            }
+        });
+
+        if(flag) {
+            alert("Email is in use");
+        }
+        else if(user.email != "" && user.password != "" && user.fullName != "" && user.address != "") {
+            try {
+                await axios.post(`${baseUrl}/user/`, {
+                name: user.fullName,
+                password: user.password,
+                email: user.email,
+                address: user.address,
+            });
+                navigation.navigate('Main');
+            } catch (e) {
+                console.error("handleSignUp Failed\n" + e);
+            }
+
+        } else {
+            alert("Must fill all of the fields");
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -9,14 +59,14 @@ export default function Register({ navigation }) {
             <Text style={styles.title}>Foodie</Text>
             <Text style={styles.subtitle}>Discover and order from local restaurants</Text>
 
-            <TextInput placeholder="Email" style={styles.input} />
-            <TextInput placeholder="Password" style={styles.input} secureTextEntry />
-            <TextInput placeholder="Full Name" style={styles.input} />
-            <TextInput placeholder="Delivery Address" style={styles.input} />
+            <TextInput placeholder="Email" style={styles.input} onChangeText={(emailT) => setUser((obj) => ({...obj, email: emailT}))}/>
+            <TextInput placeholder="Password" style={styles.input} secureTextEntry onChangeText={(passwordT) => setUser((obj) => ({...obj, password: passwordT}))}/>
+            <TextInput placeholder="Full Name" style={styles.input} onChangeText={(nameT) => setUser((obj) => ({...obj, fullName: nameT}))}/>
+            <TextInput placeholder="Delivery Address" style={styles.input} onChangeText={(addressT) => setUser((obj) => ({...obj, address: addressT}))}/>
 
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('Main')}>
+                onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
         </View>

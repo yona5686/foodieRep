@@ -1,19 +1,52 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View } from 'react-native';
+import axios from "axios";
+import { useResContext } from "../ResContext";
 
 export default function SignIn( {navigation} ){
+
+    const { baseUrl } = useResContext();
+
+    const [user, setUser] = useState({email: "", password: ""});
+    const [usersList, setUsersList] = useState([]);
+
+    useEffect(() => {
+        const getList = async () => {
+            const res = await axios.get(`${baseUrl}/user/`);
+            setUsersList(res.data);
+        }
+
+        try {
+            getList();
+        } catch(e) {
+            console.error("getUsersList Failed\n" + e);
+        }
+    }, [])
+
+    function handleSignIn() {
+        let flag = false;
+        usersList.forEach(curUser => {
+            if(user.email == curUser.email && user.password == curUser.password) {
+                flag = true;
+                navigation.navigate('Main'); 
+            }
+        });
+        if(!flag)
+            alert("Wrong detailes");
+    }
+
 
     return(
         <View style={styles.container}>
             <Image source={require('../assets/frogWave.png')} style={styles.image} />
             <Text style={styles.title}>Welcome back!</Text>
 
-            <TextInput placeholder="Email" style={styles.input} />
-            <TextInput placeholder="Password" style={styles.input} secureTextEntry />
+            <TextInput placeholder="Email" style={styles.input} onChangeText={(emailT) => setUser((obj) => ({...obj, email: emailT}))}/>
+            <TextInput placeholder="Password" style={styles.input} secureTextEntry onChangeText={(passwordT) => setUser((obj) => ({...obj, password: passwordT}))}/>
 
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('Main')}>
+                onPress={handleSignIn}>
                 <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
         </View>
