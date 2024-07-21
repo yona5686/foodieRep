@@ -1,27 +1,40 @@
-import React, { useState } from 'react';
-import { StyleSheet, ScrollView, Image, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, ScrollView, Image } from 'react-native';
 import { useResContext } from '../ResContext';
 import CartSummary from '../components/CartSummary';
 import Check from '../components/Check';
+import axios from 'axios';
 
 export default function RestaurantPage() {
 
-    const { restaurant, delCost } = useResContext();
+    const { restaurant, delCost, baseUrl } = useResContext();
 
-    const [dishes, setDishes] = useState([//example get dishes of restaurant
-        { name: 'Humus', price: 12 },
-        { name: 'Shnizel', price: 15 },
-        { name: 'Hot dog', price: 18 },
-        { name: 'Humus Shnizel', price: 15 },
-    ]);
+    const [dishes, setDishes] = useState([]);
+    const [quantities, setQuantities] = useState([]);
 
-    const [quantities, setQuantities] = useState(dishes.reduce((arr, dish) => {
-        arr[dish.name] = 0;
-        return arr;
-    }, {}));
+
+    useEffect(() => {
+        const getDishesOfRest = async () => {
+            const res = await axios.get(`${baseUrl}/food/restId/${restaurant.id}`)
+            setDishes(res.data);
+
+            if(res.data.length > 0)
+                setQuantities(res.data.reduce((arr, dish) => {
+                    arr[dish.name] = 0;
+                    return arr;
+                }, {}));
+        }
+
+        try {
+            getDishesOfRest();
+        } catch(e) {
+            console.error("getDishesOfRest Failed\n" + e);
+        }
+    }, [restaurant])
+    
 
     const calculateTotal = () => {
-        return dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.name])), 0) + delCost;
+        return (dishes.length>0 ? dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.name])), 0) : 0) + delCost;
     };
 
     const [checked, setChecked] = useState(false);

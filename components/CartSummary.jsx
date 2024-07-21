@@ -18,7 +18,7 @@ export default function CartSummary({ dishes, quantities, setQuantities, setChec
     return(
         <View style={styles.cartContainer}>
             <Text style={styles.subHeader}>{restaurant.name} - Cart Summary</Text>
-            {dishes.map((item) => (
+            {dishes.length>0 && dishes.map((item) => (
                 <View style={styles.dishContainer} key={item.name}>
                     <Text style={styles.dishName}>{item.name}</Text>
                     <View style={styles.quantityContainer}>

@@ -1,15 +1,28 @@
-import React, {useState} from "react"
+import React, { useState, useEffect } from "react"
 import { ScrollView, StyleSheet, Image, View, Text } from "react-native"
 import RestaurantCard from "../components/RestaurantCard";
+import axios from "axios";
+import { useResContext } from "../ResContext";
 
 export default function Home({ navigation }){
 
-    const [restaurants, setRestaurants] = useState([
-        { name: "Libia", address: "Hahalutz", deliveryCost: 5, img: "https://shorturl.at/s79h3", theme: "Israeli" },
-        { name: "Pizza moshe", address: "Eilat", deliveryCost: 3, img: "https://shorturl.at/ommKY", theme: "Pizza" },
-        { name: "Baladi", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" }
-    ]);
-    //example for restaurants after aggregation
+    const { baseUrl } = useResContext();
+
+    const [topSellers, setTopSellers] = useState([]);
+    const [freeDelRest, setFreeDelRest] = useState([]);
+
+    useEffect(() => {
+        const getFreeDelivery = async () => {
+            const res = await axios.get(`${baseUrl}/rest/freeDelivery`)
+            setFreeDelRest(res.data);
+        }
+
+        try {
+            getFreeDelivery();
+        } catch(e) {
+            console.error("getFreeDelivery Failed\n" + e);
+        }
+    }, [])
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
@@ -17,14 +30,14 @@ export default function Home({ navigation }){
 
             <View style={styles.dishContainer}><Text style={styles.headerText}>Top sellers</Text></View>
             <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never">
-                {restaurants.map((currentRes, index) => (
+                {topSellers && topSellers.map((currentRes, index) => (
                     <RestaurantCard currentRes = {currentRes} nav = {navigation} key = {index} fixedSize={1.5}/>
                 ))}
             </ScrollView>
 
-            <View style={styles.dishContainer}><Text style={styles.headerText}>Favorites</Text></View>
+            <View style={styles.dishContainer}><Text style={styles.headerText}>Free delivery</Text></View>
             <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never">
-                {restaurants.map((currentRes, index) => (
+                {freeDelRest && freeDelRest.map((currentRes, index) => (
                     <RestaurantCard currentRes = {currentRes} nav = {navigation} key = {index} fixedSize={1.5}/>
                 ))}
             </ScrollView>
