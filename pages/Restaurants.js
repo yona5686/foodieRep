@@ -1,11 +1,13 @@
 import { StyleSheet, Text, ScrollView } from "react-native"
 import { useState, useEffect } from "react"
 import axios from "axios";
-
+import { useResContext } from "../ResContext";
 import ThemeButtons from "../components/ThemeButtons";
 import AllRestaurantByTheme from "../components/AllRestaurantByTheme";
 
 export default function Restaurants( {navigation} ){
+
+    const { baseUrl } = useResContext();
 
     const [themes, setThemes] = useState(["All"]);
     const [restaurants, setRestaurants] = useState([]);
@@ -13,7 +15,7 @@ export default function Restaurants( {navigation} ){
 
     useEffect(() => {
         const getAllThemes = async () => {
-            const res = await axios.get(`http://localhost:3000/rest/Themes`);
+            const res = await axios.get(`${baseUrl}/rest/Themes`);
             setThemes([...themes, ...res.data]);    
         }
 
@@ -26,7 +28,7 @@ export default function Restaurants( {navigation} ){
 
     useEffect(() => {
         const getResByTheme = async () => {
-            const res = await axios.get(`http://localhost:3000/rest/Theme/${selectedTheme}`);
+            const res = await axios.get(`${baseUrl}/rest/Theme/${selectedTheme}`);
             setRestaurants(res.data);
         }
 
@@ -41,7 +43,7 @@ export default function Restaurants( {navigation} ){
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Choose theme</Text>
             <ThemeButtons themesLst = {themes} setTheme = {setSelectedTheme} selectedTheme = {selectedTheme}/>
-            <AllRestaurantByTheme theme={selectedTheme} nav={navigation} restaurants={restaurants}/>
+            <AllRestaurantByTheme nav={navigation} restaurants={restaurants}/>
         </ScrollView>
     )
 }

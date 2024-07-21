@@ -11,8 +11,10 @@ export const ResProvider = ({ children }) => {
         setDelCost(restaurant.deliveryCost);
     }, [restaurant])
 
+    const baseUrl = "https://bk17w1k8-3000.euw.devtunnels.ms";
+
     return (
-        <ResContext.Provider value={{ restaurant, setRestaurant, delCost, setDelCost }}>
+        <ResContext.Provider value={{ restaurant, setRestaurant, delCost, setDelCost, baseUrl }}>
             {children}
         </ResContext.Provider>
     );

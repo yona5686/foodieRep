@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { useResContext } from '../ResContext';
 
 
@@ -20,6 +20,20 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             //send order details to db
         }
     }
+    
+    const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        if (err) {
+            Animated.sequence([
+                Animated.timing(shakeAnimation, { toValue: 5, duration: 50, useNativeDriver: true }),
+                Animated.timing(shakeAnimation, { toValue: -5, duration: 50, useNativeDriver: true }),
+                Animated.timing(shakeAnimation, { toValue: 5, duration: 50, useNativeDriver: true }),
+                Animated.timing(shakeAnimation, { toValue: -5, duration: 50, useNativeDriver: true }),
+                Animated.timing(shakeAnimation, { toValue: 0, duration: 50, useNativeDriver: true }),
+            ]).start();
+        }
+    }, [err]);
 
     return(
         <View style={styles.cartContainer}>
@@ -27,7 +41,14 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             {dishes.map((item) => (
                 <View style={styles.dishContainer} key={item.name}>
                     <Text style={styles.dishName}>{item.name}</Text>
-                    <Text style={!err ? styles.quantityText : {...styles.quantityText, color: "#e20606", fontSize: 20, fontWeight: 'bold'}}>x{quantities[item.name]}</Text>
+                    <Animated.Text 
+                        style={
+                            !err 
+                            ? styles.quantityText 
+                            : {...styles.quantityText, color: "#e20606", fontSize: 20, fontWeight: 'bold', transform: [{translateX: shakeAnimation}]}
+                        }>
+                        x{quantities[item.name]}
+                    </Animated.Text>                    
                     <Text style={styles.priceText}>${item.price*quantities[item.name]}</Text>
                 </View>
             ))}

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import RestaurantCard from './RestaurantCard';
 
-export default function AllRestaurantByTheme({theme, nav, restaurants}) {//theme sent to back-end
+export default function AllRestaurantByTheme({nav, restaurants}) {
 
     return (
         <View style={styles.container}>
