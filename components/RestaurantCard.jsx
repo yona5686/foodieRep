@@ -23,7 +23,7 @@ export default function RestaurantCard({ currentRes, nav, fixedSize }) {
                 <View style={styles.textContainer}>
                     <Text style={styles.restaurantName}>{currentRes.name}</Text>
                     <Text style={styles.restaurantTheme}>{currentRes.theme}</Text>
-                    <Text style={styles.addressText}>{currentRes.address}</Text>
+                    <Text style={styles.addressText}>{currentRes.addressName}</Text>
                     <View style={styles.deliveryInfo}>
                         <Text style={styles.deliveryCost}>{currentRes.deliveryCost == 0 ? "FREE" : currentRes.deliveryCost + "$"}</Text>
                         <MaterialCommunityIcons

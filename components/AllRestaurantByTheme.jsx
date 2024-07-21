@@ -1,31 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import RestaurantCard from './RestaurantCard';
 
-export default function AllRestaurantByTheme({theme, nav}) {//theme sent to back-end
-
-    const [restaurants, setRestaurants] = useState([
-        { name: "Libia", address: "Hahalutz", deliveryCost: 5, img: "https://shorturl.at/s79h3", theme: "Israeli" },
-        { name: "Pizza moshe", address: "Eilat", deliveryCost: 3, img: "https://shorturl.at/ommKY", theme: "Pizza" },
-        { name: "Baladi", address: "Maale adumim", deliveryCost: 0, img: "https://shorturl.at/V2Gg9", theme: "Meat" }
-    ]);
-    //example for get restaurants
-
-    useEffect(() => {
-        if(theme == "")
-            //send request getAllRestaurants
-            console.log("all");
-        else
-            //getAllRestaurantsByTheme(theme)
-            console.log(theme);
-    }, [theme])
-    //example /\
-
+export default function AllRestaurantByTheme({theme, nav, restaurants}) {//theme sent to back-end
 
     return (
         <View style={styles.container}>
-            {restaurants.map((currentRes, index) => (
+            {restaurants.length>0 && restaurants.map((currentRes, index) => (
                 <RestaurantCard currentRes={currentRes} key={index} nav={nav}/>
             ))}
         </View>
