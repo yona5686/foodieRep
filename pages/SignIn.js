@@ -5,7 +5,7 @@ import { useResContext } from "../ResContext";
 
 export default function SignIn( {navigation} ){
 
-    const { baseUrl } = useResContext();
+    const { baseUrl, setCurUser } = useResContext();
 
     const [user, setUser] = useState({email: "", password: ""});
     const [usersList, setUsersList] = useState([]);
@@ -24,16 +24,17 @@ export default function SignIn( {navigation} ){
     }, [])
 
     function handleSignIn() {
-        // let flag = false;
-        // usersList.forEach(curUser => {
-        //     if(user.email == curUser.email && user.password == curUser.password) {
-        //         flag = true;
-        //         navigation.navigate('Main'); 
-        //     }
-        // });
-        // if(!flag)
-        //     alert("Wrong detailes");
-        navigation.navigate('Main'); //to remove
+        let flag = false;
+        usersList.forEach(curUser => {
+            if(user.email == curUser.email && user.password == curUser.password) {
+                flag = true;
+                setCurUser({id: curUser.id, name: curUser.name})
+                navigation.navigate('Main'); 
+            }
+        });
+        if(!flag)
+            alert("Wrong detailes");
+        // navigation.navigate('Main'); //to remove
     }
 
 

@@ -1,12 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { useResContext } from '../ResContext';
+import axios from 'axios';
 
 
 export default function Check({ dishes, quantities, setChecked, calculateTotal }) {
 
-    const { restaurant, delCost } = useResContext();
+    const { baseUrl ,restaurant, delCost, curUser } = useResContext();
     const [err, setErr] = useState(false);
+
+    async function sendOrderToDB() {
+        let count = 0;
+        let foods = [];
+        dishes.forEach(dish => {
+            foodId = dish.id;
+            quantity = quantities[dish.name];
+            foods[count] = {foodId, quantity};
+            count++;
+        });
+
+        const res = await axios.post(`${baseUrl}/order/`, { 
+            userId: curUser.id,
+            restaurantId: restaurant.id,
+            foodOrdered: foods,
+        });        
+
+    }
 
     function finishOrder() {
         if(calculateTotal() <= restaurant.deliveryCost){
@@ -16,8 +35,13 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             }, 500);
         }
         else {
-            alert("On the way");
-            //send order details to db
+            try {
+                alert("On the way");
+                sendOrderToDB();
+            } catch(e) {
+                console.error("sendOrderToDB Failed\n" + e);
+            }
+            
         }
     }
     

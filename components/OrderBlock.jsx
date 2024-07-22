@@ -2,7 +2,7 @@ import { useResContext } from "../ResContext";
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function OrderBlock() {
+export default function OrderBlock({ order }) {
 
     const { restaurant, delCost  } = useResContext();
 

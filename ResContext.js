@@ -5,6 +5,7 @@ const ResContext = createContext();
 export const ResProvider = ({ children }) => {
 
     const [restaurant, setRestaurant] = useState({}); 
+    const [curUser, setCurUser] = useState({});//{id, name}
     const [delCost, setDelCost] = useState(restaurant.deliveryCost);
 
     useEffect(() => {
@@ -14,7 +15,7 @@ export const ResProvider = ({ children }) => {
     const baseUrl = "https://bk17w1k8-3000.euw.devtunnels.ms";
 
     return (
-        <ResContext.Provider value={{ restaurant, setRestaurant, delCost, setDelCost, baseUrl }}>
+        <ResContext.Provider value={{ restaurant, setRestaurant, delCost, setDelCost, baseUrl, curUser, setCurUser }}>
             {children}
         </ResContext.Provider>
     );

@@ -5,11 +5,15 @@ import axios from 'axios';
 
 export default function Register({ navigation }) {
 
-    const { baseUrl } = useResContext();
+    const { baseUrl, setCurUser } = useResContext();
 
     const [user, setUser] = useState({email: "", password: "", fullName: "", address: ""});
-
     const [usersList, setUsersList] = useState([]);
+    
+    const [errTextFlag, setErrTextFlag] = useState(false);
+    const [errText, setErrText] = useState("");
+
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/;
 
     useEffect(() => {
         const getList = async () => {
@@ -36,13 +40,25 @@ export default function Register({ navigation }) {
             alert("Email is in use");
         }
         else if(user.email != "" && user.password != "" && user.fullName != "" && user.address != "") {
+            if(user.password.length <= 6 ){
+                setErrTextFlag(true);
+                setErrText("Password must be longer than 6 characters");
+                return;
+            } else if(reg.test(user.email) == false){
+                setErrTextFlag(true);
+                setErrText("Email is not valid");
+                return;
+            }
             try {
-                await axios.post(`${baseUrl}/user/`, {
+                const res = await axios.post(`${baseUrl}/user/`, {
                 name: user.fullName,
                 password: user.password,
                 email: user.email,
                 address: user.address,
             });
+                setErrTextFlag(false);                
+                setErrText("");
+                setCurUser({id: res.data._id,name: res.data.name});
                 navigation.navigate('Main');
             } catch (e) {
                 console.error("handleSignUp Failed\n" + e);
@@ -69,6 +85,8 @@ export default function Register({ navigation }) {
                 onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
+            
+            {errTextFlag ? <Text style={styles.errText}>*{errText}</Text> : null}
         </View>
     );
 }
@@ -118,4 +136,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
     },
+    errText: {
+        fontSize: 12,
+        color: "red"
+    }
 });
