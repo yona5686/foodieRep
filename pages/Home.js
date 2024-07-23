@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { ScrollView, StyleSheet, Image, View, Text } from "react-native"
+import { ScrollView, StyleSheet, Image, View, Text, TouchableOpacity } from "react-native"
 import RestaurantCard from "../components/RestaurantCard";
 import OrderBlock from "../components/OrderBlock";
 import ThemeCard from "../components/ThemeCard";
 import axios from "axios";
 import { useResContext } from "../ResContext";
+import Toast from "react-native-toast-message";
 
 export default function Home({ navigation }){
 
@@ -89,8 +90,7 @@ export default function Home({ navigation }){
                     <ThemeCard nav={navigation} theme={theme} key={index}/>
                 ))}
             </View>
-
-            
+           
         </ScrollView>
     )
 }

@@ -4,9 +4,9 @@ import { useResContext } from '../ResContext';
 import axios from 'axios';
 
 
-export default function Check({ dishes, setDishes, quantities, setQuantities, calculateTotal }) {
+export default function Check({ dishes, setDishes, quantities, setQuantities, calculateTotal, nav }) {
 
-    const { baseUrl ,restaurant, delCost, setDelCost, curUser, setChecked, getPastOrders, isPastOrder, setIsPastOrder, curOrder, setCurOrder } = useResContext();
+    const { baseUrl ,restaurant, delCost, setDelCost, curUser, setChecked, getPastOrders, isPastOrder, setIsPastOrder, curOrder, orderToast } = useResContext();
     const [err, setErr] = useState(false);
 
     async function sendOrderToDB() {
@@ -37,9 +37,10 @@ export default function Check({ dishes, setDishes, quantities, setQuantities, ca
         }
         else {
             try {
-                alert("Ordered successfully");
+                orderToast(30000);
                 setIsPastOrder(false);
                 sendOrderToDB();
+                nav.navigate("Home");
             } catch(e) {
                 console.error(e);
             }

@@ -5,7 +5,7 @@ import CartSummary from '../components/CartSummary';
 import Check from '../components/Check';
 import axios from 'axios';
 
-export default function RestaurantPage() {
+export default function RestaurantPage({ navigation }) {
 
     const { restaurant, delCost, baseUrl, checked, isPastOrder } = useResContext();
 
@@ -43,7 +43,7 @@ export default function RestaurantPage() {
             {!checked ? (
                 <CartSummary dishes = {dishes} quantities = {quantities} setQuantities = {setQuantities} calculateTotal = {calculateTotal}/>
             ) : (
-                <Check dishes = {dishes} setDishes={setDishes} quantities = {quantities} setQuantities={setQuantities} calculateTotal = {calculateTotal}/>
+                <Check dishes = {dishes} setDishes={setDishes} quantities = {quantities} setQuantities={setQuantities} calculateTotal = {calculateTotal} nav={navigation}/>
             )}
         </ScrollView>
     );
