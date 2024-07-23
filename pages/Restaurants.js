@@ -7,11 +7,10 @@ import AllRestaurantByTheme from "../components/AllRestaurantByTheme";
 
 export default function Restaurants( {navigation} ){
 
-    const { baseUrl } = useResContext();
+    const { baseUrl, selectedTheme, setSelectedTheme } = useResContext();
 
     const [themes, setThemes] = useState(["All"]);
     const [restaurants, setRestaurants] = useState([]);
-    const [selectedTheme, setSelectedTheme] = useState("All");
 
     useEffect(() => {
         const getAllThemes = async () => {

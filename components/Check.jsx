@@ -18,7 +18,6 @@ export default function Check({ dishes, setDishes, quantities, setQuantities, ca
             foods[count] = {foodId, quantity};
             count++;
         });
-        console.log(dishes);
         const res = await axios.post(`${baseUrl}/order/`, { 
             userId: curUser.id,
             restaurantId: restaurant.id,
@@ -65,8 +64,8 @@ export default function Check({ dishes, setDishes, quantities, setQuantities, ca
     useEffect(() => {
         const getDishes = async () => {
             const res = await axios.get(`${baseUrl}/order/getFoods/${curOrder.id}`);
+            
             setDishes(res.data);
-            console.log(res.data);
 
             setDelCost(res.data[0].deliveryCost);
 

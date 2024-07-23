@@ -12,6 +12,8 @@ export const ResProvider = ({ children }) => {
     const [pastOrders, setPastOrders] = useState([]);
     const [isPastOrder, setIsPastOrder] = useState(false);
     const [curOrder, setCurOrder] = useState(null); 
+    const [selectedTheme, setSelectedTheme] = useState("All");
+
 
 
     useEffect(() => {
@@ -36,7 +38,11 @@ export const ResProvider = ({ children }) => {
     const baseUrl = "https://bk17w1k8-3000.euw.devtunnels.ms";
 
     return (
-        <ResContext.Provider value={{ restaurant, setRestaurant, delCost, setDelCost, baseUrl, curUser, setCurUser, checked, setChecked, pastOrders, setPastOrders, getPastOrders, isPastOrder, setIsPastOrder, curOrder, setCurOrder }}>
+        <ResContext.Provider value={{ 
+            restaurant, setRestaurant, delCost, setDelCost, baseUrl, curUser, setCurUser,checked, setChecked,
+            pastOrders, setPastOrders, getPastOrders, isPastOrder, setIsPastOrder, curOrder, setCurOrder,
+            selectedTheme, setSelectedTheme
+        }}>
             {children}
         </ResContext.Provider>
     );

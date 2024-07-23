@@ -22,7 +22,7 @@ export default function RestaurantCard({ currentRes, nav, fixedSize }) {
             nav.navigate("RestaurantPage");
 
         }}>
-            <View style={{...styles.cardContainer, width: 400/fixedSize}}>
+            <View style={{...styles.cardContainer, width: 400/fixedSize, marginBottom: fixedSize!=1 ? 40 : 10}}>
                 <Image source={{ uri: currentRes.img }} style={{...styles.image, width: 150/fixedSize, height: 150/fixedSize}}></Image>
                 <View style={styles.textContainer}>
                     <Text style={styles.restaurantName}>{currentRes.name}</Text>
@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 400,
         borderWidth: 0.5,
-        marginHorizontal: 5
+        marginHorizontal: 5,
+        
     },
     textContainer: {
         flex: 1,

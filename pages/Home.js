@@ -2,29 +2,54 @@ import React, { useState, useEffect } from "react"
 import { ScrollView, StyleSheet, Image, View, Text } from "react-native"
 import RestaurantCard from "../components/RestaurantCard";
 import OrderBlock from "../components/OrderBlock";
+import ThemeCard from "../components/ThemeCard";
 import axios from "axios";
 import { useResContext } from "../ResContext";
 
 export default function Home({ navigation }){
 
-    const { baseUrl, pastOrders } = useResContext();
+    const { baseUrl, pastOrders, checked, curUser } = useResContext();
 
+    const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
     const [topSellers, setTopSellers] = useState([]);
     const [freeDelRest, setFreeDelRest] = useState([]);
 
+    const [bestThemes, setBestThemes] = useState([]);
+
 
     useEffect(() => {
+
+        const getFavRests = async () => {
+            const res = await axios.get(`${baseUrl}/order/favoriteRestaurantsOfUser/${curUser.id}`);
+            setFavoriteRestaurants(res.data);
+        }
+
+        const getTopSellersRest = async () => {
+            const res = await axios.get(`${baseUrl}/order/topRestaurants`);
+            setTopSellers(res.data);
+        }
+
         const getFreeDelivery = async () => {
-            const res = await axios.get(`${baseUrl}/rest/freeDelivery`)
+            const res = await axios.get(`${baseUrl}/rest/freeDelivery`);
             setFreeDelRest(res.data);
         }
 
+        const setBestSellerThemes = async () => {
+            const res = await axios.get(`${baseUrl}/order/bestThemes`);
+            let themes = res.data.map(themeObj => themeObj.theme);
+            setBestThemes(themes);
+        }
+
+
         try {
+            getFavRests();
+            getTopSellersRest();
             getFreeDelivery();
+            setBestSellerThemes();
         } catch(e) {
             console.error(e);
         }
-    }, [])
+    }, [checked])
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
@@ -34,6 +59,13 @@ export default function Home({ navigation }){
             <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never" style={{width: "100%"}}>
                 {pastOrders && pastOrders.map((currentOrder, index) => (
                     <OrderBlock key = {index} order = {currentOrder} nav={navigation}/>
+                ))}
+            </ScrollView>
+
+            <View style={styles.dishContainer}><Text style={styles.headerText}>Favorites</Text></View>
+            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never" style={{width: "100%"}}>
+                {favoriteRestaurants && favoriteRestaurants.map((currentRes, index) => (
+                    <RestaurantCard currentRes = {currentRes} nav = {navigation} key = {index} fixedSize={1.5}/>
                 ))}
             </ScrollView>
 
@@ -50,6 +82,13 @@ export default function Home({ navigation }){
                     <RestaurantCard currentRes = {currentRes} nav = {navigation} key = {index} fixedSize={1.5}/>
                 ))}
             </ScrollView>
+            
+            <View style={styles.dishContainer}><Text style={styles.headerText}>Best themes</Text></View>
+            <View style={styles.staticHorizontalView}>
+                {bestThemes && bestThemes.map((theme, index) => (
+                    <ThemeCard nav={navigation} theme={theme} key={index}/>
+                ))}
+            </View>
 
             
         </ScrollView>
@@ -80,5 +119,10 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         fontSize: 16,
         fontWeight: "bold"
+    },
+    staticHorizontalView: {
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row"
     }
 })
