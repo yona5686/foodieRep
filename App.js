@@ -5,8 +5,8 @@ import { ResProvider } from './ResContext';
 export default function App() {
 
   return(
-    <ResProvider>
-      <StartingStack/>
-    </ResProvider>
+      <ResProvider>
+        <StartingStack/>
+      </ResProvider>
   )
 }

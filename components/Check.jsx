@@ -37,7 +37,7 @@ export default function Check({ dishes, setDishes, quantities, setQuantities, ca
         }
         else {
             try {
-                alert("On the way");
+                alert("Ordered successfully");
                 setIsPastOrder(false);
                 sendOrderToDB();
             } catch(e) {
