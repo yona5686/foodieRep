@@ -6,6 +6,8 @@ import { useResContext } from '../ResContext';
 
 export default function RestaurantCard({ currentRes, nav, fixedSize }) {
 
+    const { setChecked, setIsPastOrder } = useResContext();
+
     if(fixedSize == null){
         fixedSize = 1;
     }
@@ -14,6 +16,8 @@ export default function RestaurantCard({ currentRes, nav, fixedSize }) {
 
     return(
         <TouchableOpacity onPress={() => {
+            setIsPastOrder(false);
+            setChecked(false);
             setRestaurant(currentRes);
             nav.navigate("RestaurantPage");
 

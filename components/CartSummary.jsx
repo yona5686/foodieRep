@@ -4,9 +4,9 @@ import PromoCodeComp from '../components/PromoCodeComp';
 import { useResContext } from '../ResContext';
 
 
-export default function CartSummary({ dishes, quantities, setQuantities, setChecked, calculateTotal }) {
+export default function CartSummary({ dishes, quantities, setQuantities, calculateTotal }) {
 
-    const { restaurant, delCost, setDelCost } = useResContext();
+    const { restaurant, delCost, setDelCost, setChecked } = useResContext();
 
     const handleQuantityChange = (name, amount) => {
         setQuantities(prevQuantities => ({

@@ -7,18 +7,17 @@ import axios from 'axios';
 
 export default function RestaurantPage() {
 
-    const { restaurant, delCost, baseUrl } = useResContext();
+    const { restaurant, delCost, baseUrl, checked, isPastOrder } = useResContext();
 
     const [dishes, setDishes] = useState([]);
     const [quantities, setQuantities] = useState([]);
-
 
     useEffect(() => {
         const getDishesOfRest = async () => {
             const res = await axios.get(`${baseUrl}/food/restId/${restaurant.id}`)
             setDishes(res.data);
 
-            if(res.data.length > 0)
+            if(res.data.length > 0 && !isPastOrder)
                 setQuantities(res.data.reduce((arr, dish) => {
                     arr[dish.name] = 0;
                     return arr;
@@ -37,16 +36,14 @@ export default function RestaurantPage() {
         return (dishes.length>0 ? dishes.reduce((total, dish) => total + (dish.price * (quantities[dish.name])), 0) : 0) + delCost;
     };
 
-    const [checked, setChecked] = useState(false);
-
 
     return (
         <ScrollView style={styles.container}>
             <Image source={{ uri: restaurant.img }} style={styles.image}></Image>
             {!checked ? (
-                <CartSummary dishes = {dishes} quantities = {quantities} setQuantities = {setQuantities} setChecked = {setChecked} calculateTotal = {calculateTotal}/>
+                <CartSummary dishes = {dishes} quantities = {quantities} setQuantities = {setQuantities} calculateTotal = {calculateTotal}/>
             ) : (
-                <Check dishes = {dishes} quantities = {quantities} setChecked = {setChecked} calculateTotal = {calculateTotal}/>
+                <Check dishes = {dishes} setDishes={setDishes} quantities = {quantities} setQuantities={setQuantities} calculateTotal = {calculateTotal}/>
             )}
         </ScrollView>
     );

@@ -7,19 +7,13 @@ import { useResContext } from "../ResContext";
 
 export default function Home({ navigation }){
 
-    const { baseUrl, curUser } = useResContext();
+    const { baseUrl, pastOrders } = useResContext();
 
-    const [postOrders, setPostOrders] = useState([]);
     const [topSellers, setTopSellers] = useState([]);
     const [freeDelRest, setFreeDelRest] = useState([]);
 
-    useEffect(() => {
-        // const getPostOrders = async () => {
-        //     const res = await axios.get(`${baseUrl}/userId/${curUser.id}`)
-        //     //setPostOrders(res.data);
-        //     console.log(res.data);
-        // }
 
+    useEffect(() => {
         const getFreeDelivery = async () => {
             const res = await axios.get(`${baseUrl}/rest/freeDelivery`)
             setFreeDelRest(res.data);
@@ -28,7 +22,7 @@ export default function Home({ navigation }){
         try {
             getFreeDelivery();
         } catch(e) {
-            console.error("getFreeDelivery Failed\n" + e);
+            console.error(e);
         }
     }, [])
 
@@ -36,22 +30,22 @@ export default function Home({ navigation }){
         <ScrollView contentContainerStyle={styles.container}>
             <Image source={require('../assets/foodTruck.png')} style={styles.image} />
 
-            <View style={styles.dishContainer}><Text style={styles.headerText}>Post orders</Text></View>
-            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never">
-                {postOrders && postOrders.map((currentOrder, index) => (
-                    <OrderBlock key = {index} order = {currentOrder}/>
+            <View style={styles.dishContainer}><Text style={styles.headerText}>Past orders</Text></View>
+            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never" style={{width: "100%"}}>
+                {pastOrders && pastOrders.map((currentOrder, index) => (
+                    <OrderBlock key = {index} order = {currentOrder} nav={navigation}/>
                 ))}
             </ScrollView>
 
             <View style={styles.dishContainer}><Text style={styles.headerText}>Top sellers</Text></View>
-            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never">
+            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never" style={{width: "100%"}}>
                 {topSellers && topSellers.map((currentRes, index) => (
                     <RestaurantCard currentRes = {currentRes} nav = {navigation} key = {index} fixedSize={1.5}/>
                 ))}
             </ScrollView>
 
             <View style={styles.dishContainer}><Text style={styles.headerText}>Free delivery</Text></View>
-            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never">
+            <ScrollView horizontal showsHorizontalScrollIndicator = {false} overScrollMode="never" style={{width: "100%"}}>
                 {freeDelRest && freeDelRest.map((currentRes, index) => (
                     <RestaurantCard currentRes = {currentRes} nav = {navigation} key = {index} fixedSize={1.5}/>
                 ))}

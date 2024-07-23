@@ -4,9 +4,9 @@ import { useResContext } from '../ResContext';
 import axios from 'axios';
 
 
-export default function Check({ dishes, quantities, setChecked, calculateTotal }) {
+export default function Check({ dishes, setDishes, quantities, setQuantities, calculateTotal }) {
 
-    const { baseUrl ,restaurant, delCost, curUser } = useResContext();
+    const { baseUrl ,restaurant, delCost, setDelCost, curUser, setChecked, getPastOrders, isPastOrder, setIsPastOrder, curOrder, setCurOrder } = useResContext();
     const [err, setErr] = useState(false);
 
     async function sendOrderToDB() {
@@ -18,13 +18,15 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             foods[count] = {foodId, quantity};
             count++;
         });
-
+        console.log(dishes);
         const res = await axios.post(`${baseUrl}/order/`, { 
             userId: curUser.id,
             restaurantId: restaurant.id,
             foodOrdered: foods,
+            deliveryCost: delCost
         });        
 
+        getPastOrders();
     }
 
     function finishOrder() {
@@ -37,9 +39,10 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
         else {
             try {
                 alert("On the way");
+                setIsPastOrder(false);
                 sendOrderToDB();
             } catch(e) {
-                console.error("sendOrderToDB Failed\n" + e);
+                console.error(e);
             }
             
         }
@@ -58,6 +61,29 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
             ]).start();
         }
     }, [err]);
+    
+    useEffect(() => {
+        const getDishes = async () => {
+            const res = await axios.get(`${baseUrl}/order/getFoods/${curOrder.id}`);
+            setDishes(res.data);
+            console.log(res.data);
+
+            setDelCost(res.data[0].deliveryCost);
+
+            setQuantities(res.data.reduce((arr, dish) => {
+                arr[dish.name] = dish.quantity;
+                return arr;
+            }, {}));
+        }
+    
+        if(isPastOrder){
+            try {
+                getDishes();
+            } catch(e) {
+                console.error(e);
+            }
+        }
+    }, [curOrder])
 
     return(
         <View style={styles.cartContainer}>
@@ -86,7 +112,7 @@ export default function Check({ dishes, quantities, setChecked, calculateTotal }
                 <TouchableOpacity style={styles.checkoutButton} onPress={() => finishOrder()}>
                     <Text style={styles.checkoutButtonText}>Order</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.editButton} onPress={() => setChecked(false)}>
+                <TouchableOpacity style={styles.editButton} onPress={() => {setChecked(false); setIsPastOrder(false)}}>
                     <Text style={styles.checkoutButtonText}>Edit</Text>
                 </TouchableOpacity>
             </View>

@@ -1,28 +1,64 @@
-import { useResContext } from "../ResContext";
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { useResContext } from '../ResContext';
+import axios from 'axios';
 
-export default function OrderBlock({ order }) {
+export default function OrderBlock({ order, nav }) {
 
-    const { restaurant, delCost  } = useResContext();
+    const [curRestaurant, setCurRestaurant] = useState({});
+    const [dishes, setDishes] = useState({});
+
+    const { baseUrl, setChecked, setRestaurant, setIsPastOrder, setCurOrder } = useResContext();
+
+    useEffect(() => {
+        const getRestaurant = async () => {
+            const res = await axios.get(`${baseUrl}/rest/restId/${order.restaurantId}`);
+            setCurRestaurant(res.data);
+        }
+
+        const getDishes = async () => {
+            const res = await axios.get(`${baseUrl}/order/getFoods/${order.id}`);
+            setDishes(res.data);
+        }
+
+        try {
+            getRestaurant();
+            getDishes();
+        } catch(e) {
+            console.error(e);
+        }
+    }, [])
+
+    const calculateTotal = () => {
+        return (dishes.length>0 ? dishes.reduce((total, dish) => total + (dish.price * dish.quantity), 0) : 0) + dishes[0].deliveryCost;
+    };
+
+    function orderAgain() {
+        setCurOrder(order);
+        setIsPastOrder(true);
+        setChecked(true);
+        setRestaurant(curRestaurant);
+        nav.navigate("RestaurantPage");
+    }
+
 
     return(
-        <View style={styles.cartContainer}>
-            <Text style={styles.subHeader}>{restaurant.name} - Cart Summary</Text>
+        (dishes.length>0 && <TouchableOpacity style={styles.cartContainer} onPress={orderAgain}>
+            <Text style={styles.subHeader}>{curRestaurant.name}</Text>
             {dishes.map((item) => (
                 <View style={styles.dishContainer} key={item.name}>
                     <Text style={styles.dishName}>{item.name}</Text>
-                    <Text style={!err ? styles.quantityText : {...styles.quantityText, color: "#e20606", fontSize: 20, fontWeight: 'bold'}}>x{quantities[item.name]}</Text>
-                    <Text style={styles.priceText}>${item.price*quantities[item.name]}</Text>
+                    <Text style={styles.quantityText}>x{item.quantity}</Text>
+                    <Text style={styles.priceText}>${item.price*item.quantity}</Text>
                 </View>
             ))}
-            { delCost != 0 ? (
-                <Text style={styles.deliveryCostText}>Delivery cost: ${delCost}</Text> 
+            { dishes[0].deliveryCost != 0 ? (
+                <Text style={styles.deliveryCostText}>Delivery cost: ${dishes[0].deliveryCost}</Text> 
             ) : (
                 <Text style={{...styles.deliveryCostText, color: "green"}}>Free Delivery</Text>
             )}
             <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
-        </View>
+        </TouchableOpacity>)
     )
 }
 
@@ -36,11 +72,13 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
-        elevation: 1,
-        marginBottom: 40
+        marginBottom: 40,
+        marginHorizontal: 10,
+        borderWidth: 0.5,
+        width: 250
     },
     subHeader: {
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: 'bold',
         marginBottom: 10,
     },
@@ -53,27 +91,28 @@ const styles = StyleSheet.create({
         borderBottomColor: '#eee',
     },
     dishName: {
-        fontSize: 16,
-        flex: 2,
+        fontSize: 14, 
+        flex: 4, 
     },
     quantityText: {
-        textAlign: "left",
-        fontSize: 16,
+        fontSize: 14, 
+        flex: 1, 
+        textAlign: 'center', 
     },
     priceText: {
-        fontSize: 20,
-        flex: 1,
+        fontSize: 14, 
+        flex: 2,
         textAlign: 'right',
     },
     deliveryCostText: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 5,
         marginTop: 15,
         textAlign: 'left',
     },
     totalText: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'left',
@@ -94,7 +133,7 @@ const styles = StyleSheet.create({
     },
     checkoutButtonText: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 12,
         fontWeight: 'bold',
     },
     buttonsContainer: {

@@ -8,7 +8,7 @@ export default function DisconnectHeader({ nav }) {
 
     return (
         <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 20 }}
-            onPress={() => {nav.navigate('GetStarted'); setCurUser({});}}
+            onPress={() => {nav.navigate('GetStarted'); setCurUser(null);}}
                     title="Disconnect"
                     color="green">
             <Ionicons name='exit-outline' size={35} color={"green"}/>
